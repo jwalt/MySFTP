@@ -194,7 +194,7 @@ class Connection():
 				ftp.cwd(path)
 				ftp.dir(data.append)
 			else:
-				Debug.print("Comando incorrecto")
+				Debug.print("Wrong Command")
 			ftp.quit()
 		except Exception as e:
 			if str(e).find('Login incorrect') != -1:
@@ -214,7 +214,7 @@ class Connection():
 		try:
 			names = ftp.nlst(path)
 		except ftplib.all_errors as e:
-			Debug.print('_rm_tree: No se puede borrar {0}: {1}'.format(path, e))
+			Debug.print('_rm_tree: Cannot be erased {0}: {1}'.format(path, e))
 			return
 		for name in names:
 			if os.path.split(name)[1] in ('.', '..'): continue
@@ -228,4 +228,4 @@ class Connection():
 		try:
 			ftp.rmd(path)
 		except ftplib.all_errors as e:
-			Debug.print('_rm_tree: No se puede borrar {0}: {1}'.format(path, e))
+			Debug.print('_rm_tree: Cannot be erased {0}: {1}'.format(path, e))
