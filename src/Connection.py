@@ -20,14 +20,14 @@ class Connection():
 		Debug.print("DATE: ", datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 		Debug.print("=========================================================================")
 		salida = ""
-		if Configuration.tipo == "sftp":
+		if Configuration.type == "sftp":
 			if platform.system() == "Linux" or platform.system() == 'Darwin':
 				salida = Connection._sftpLinux(file_local=file_local, file_server=file_server, path=path, permissions=permissions, command=command)
 			elif platform.system() == "Windows" or platform.system() == 'win32' or platform.system() == 'win64':
 				salida = Connection._sftpWindows(file_local=file_local, file_server=file_server, path=path, permissions=permissions, command=command)
 		else:
 			salida = Connection._ftp(file_local=file_local, file_server=file_server, path=path, permissions=permissions, command=command)
-		Debug.print("\nSALIDA: ", str(salida))
+		Debug.print("\nOUTPUT: ", str(salida))
 		Debug.print("**************** END COMMAND - DATE: " + datetime.now().strftime("%d-%m-%Y %H:%M:%S") + " ****************\n")
 		return salida
 
@@ -115,7 +115,7 @@ class Connection():
 			dataout_name = 'data_' + unix_time + '.out'
 			f = open(os.path.join(Configuration.psftp_path, dataout_name), "w")
 			executable = 'psftp64.exe' if platform.architecture()[0] == '64bit' else 'psftp32.exe'
-			proceso = subprocess.Popen(['echo', 'n', '|', os.path.join(Configuration.package_path, 'bin', executable), "-P", Configuration.puerto, "-pw", Configuration.password, "-b" , os.path.join(Configuration.psftp_path, 'script.bat'), Configuration.usuario + "@" + Configuration.host], stdout=f, stderr=subprocess.PIPE, shell=True)
+			proceso = subprocess.Popen(['echo', 'n', '|', os.path.join(Configuration.package_path, 'bin', executable), "-P", Configuration.port, "-pw", Configuration.password, "-b" , os.path.join(Configuration.psftp_path, 'script.bat'), Configuration.user + "@" + Configuration.host], stdout=f, stderr=subprocess.PIPE, shell=True)
 			proceso.wait(8)
 			f.close()
 			errores = proceso.stderr.read()
@@ -168,8 +168,8 @@ class Connection():
 		salida = ''
 		ftp = ftplib.FTP();
 		try:
-			ftp.connect(Configuration.host, int(Configuration.puerto))
-			ftp.login(Configuration.usuario, Configuration.password)
+			ftp.connect(Configuration.host, int(Configuration.port))
+			ftp.login(Configuration.user, Configuration.password)
 			ftp.cwd(Configuration.currentPath)
 			data = []
 			if command == "ls":
