@@ -85,39 +85,39 @@ class ProgressBarCommand(sublime_plugin.WindowCommand):
 
 	@staticmethod
 	def initConnection(self):
-		ProgressBarCommand.getWindow(self).run_command('progress_bar', {"msg": 'Conectando con el servidor\nConectado en: ' + Configuration.host + ' como: ' + Configuration.usuario + "\n"})
+		ProgressBarCommand.getWindow(self).run_command('progress_bar', {"msg": 'Connecting to the server\nPlugged in: ' + Configuration.host + ' as: ' + Configuration.user + "\n"})
 
 	@staticmethod
 	def showList(self):
-		ProgressBarCommand.__runLoading(self, "Listando directorio '{}'".format(Configuration.currentPath))
+		ProgressBarCommand.__runLoading(self, "Listing directory '{}'".format(Configuration.currentPath))
 
 	@staticmethod
 	def showDownload(self, file_server, file_local):
-		ProgressBarCommand.__runLoading(self, "Descargando '{}' en '{}'.".format(file_server, file_local))
+		ProgressBarCommand.__runLoading(self, "Downloading '{}' en '{}'.".format(file_server, file_local))
 
 	@staticmethod
 	def showUpload(self, file_local, file_server):
-		ProgressBarCommand.__runLoading(self, "Subiendo '{}' en '{}'.".format(file_local, file_server))
+		ProgressBarCommand.__runLoading(self, "Uploading '{}' en '{}'.".format(file_local, file_server))
 
 	@staticmethod
 	def showMakeFile(self, file_name):
-		ProgressBarCommand.__runLoading(self, "Creando archivo '{}'.".format(file_name))
+		ProgressBarCommand.__runLoading(self, "Creating file '{}'.".format(file_name))
 
 	@staticmethod
 	def showMakeDir(self, dir_name):
-		ProgressBarCommand.__runLoading(self, "Creando carpeta '{}'.".format(dir_name))
+		ProgressBarCommand.__runLoading(self, "Creating folder '{}'.".format(dir_name))
 
 	@staticmethod
 	def showChmod(self, path):
-		ProgressBarCommand.__runLoading(self, "Cambiando permisos a '{}'.".format(path))
+		ProgressBarCommand.__runLoading(self, "Changing permissions to '{}'.".format(path))
 
 	@staticmethod
 	def showDelete(self, path):
-		ProgressBarCommand.__runLoading(self, "Borrando '{}'.".format(path))
+		ProgressBarCommand.__runLoading(self, "Deleting '{}'.".format(path))
 
 	@staticmethod
 	def showRename(self, current_name, new_name):
-		ProgressBarCommand.__runLoading(self, "Moviendo '{}' a '{}'.".format(current_name, new_name))
+		ProgressBarCommand.__runLoading(self, "Moving '{}' a '{}'.".format(current_name, new_name))
 
 	@staticmethod
 	def showSuccess(self):
@@ -133,23 +133,23 @@ class ProgressBarCommand(sublime_plugin.WindowCommand):
 
 	@staticmethod
 	def showErrorPermissions(self):
-		ProgressBarCommand.__stopLoading(self, False, "No tiene los permisos necesarios.")
+		ProgressBarCommand.__stopLoading(self, False, "You do not have the necessary permissions.")
 
 	@staticmethod
 	def showErrorCredentials(self):
-		ProgressBarCommand.__stopLoading(self, False, "El nombre de usuario o contraseña son incorrectos.")
+		ProgressBarCommand.__stopLoading(self, False, "The username or password is incorrect.")
 
 	@staticmethod
 	def showErrorTimeOutExpired(self):
-		ProgressBarCommand.__stopLoading(self, False, "Tiempo de espera agotado.")
+		ProgressBarCommand.__stopLoading(self, False, "Timeout.")
 
 	@staticmethod
 	def showConnectionRefuse(self):
-		ProgressBarCommand.__stopLoading(self, False, "No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión.")
+		ProgressBarCommand.__stopLoading(self, False, "A connection cannot be established since the destination computer expressly denied the connection.")
 
 	@staticmethod
 	def showErrorNoSuchFileOrDirectory(self):
-		ProgressBarCommand.__stopLoading(self, False, "No existe el archivo o directorio.")
+		ProgressBarCommand.__stopLoading(self, False, "The file or directory does not exist.")
 
 	@staticmethod
 	def __runLoading(self, msg, show_time=True):
