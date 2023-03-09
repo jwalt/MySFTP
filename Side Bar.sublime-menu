@@ -4,10 +4,10 @@
 		"caption": "MySFTP",
 		"children":
 		[
-			{ "caption": "Nuevo servidor", "command": "new_server", "args": {"paths": []} },
-			{ "caption": "Listar servidor", "command": "my_sftp", "args": {"paths": []} },
-			{ "caption": "Editar servidor", "command": "server_manager", "args": {"paths": []} },
-			{ "caption": "Borrar servidor", "command": "server_manager", "args": {"paths": []} },
+			{ "caption": "New Server", "command": "new_server", "args": {"paths": []} },
+			{ "caption": "List Servers", "command": "my_sftp", "args": {"paths": []} },
+			{ "caption": "Edit Server", "command": "server_manager", "args": {"paths": []} },
+			{ "caption": "Delete Server", "command": "server_manager", "args": {"paths": []} },
 			{ "caption": "Upload File", "command": "side_bar", "args": {"paths": []} },
 		]
 	}
