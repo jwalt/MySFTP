@@ -16,13 +16,13 @@ class ConnectionSSH():
 		log = []
 		# [
 		#	0. "sftp",
-		#	***. Connection.usuario + "@" + Connection.host, Antes se mandaba este parametro
+		#	***. Connection.user + "@" + Connection.host, Before this parameter was sent
 		#	1. "cd " + currentPath + " && ls -lrt | sed '/ \.$/d' | sed '/ \.\.$/d'"
 		#]
-		#args = [arguments[0], "-p " + Configuration.puerto, Configuration.usuario + "@" + Configuration.host, arguments[1]]
+		#args = [arguments[0], "-p " + Configuration.port, Configuration.user + "@" + Configuration.host, arguments[1]]
 		program = args[0] # sftp or ssh
-		port = '-P ' + Configuration.puerto
-		user_host = Configuration.usuario + "@" + Configuration.host
+		port = '-P ' + Configuration.port
+		user_host = Configuration.user + "@" + Configuration.host
 		command_remote = "cd '{}'".format(Configuration.currentPath) + args[1]
 		log.append("\n".join(args))
 		# create pipe for stdout
@@ -85,20 +85,20 @@ class ConnectionSSH():
 					if data is not None:
 						if b'assword:' in data:
 							os.write(pty_fd, _b(Configuration.password + '\n'))
-							log.append("Se escribio la contraseña")
+							log.append("password was typed")
 						elif b're you sure you want to continue connecting' in data:
 							os.write(pty_fd, b'yes\n')
-							log.append("Se dijo que si se quería continuar")
+							log.append("It was said that if you wanted to continue")
 
 					# Deal with stdout
 					data = _read(stdout_fd)
 					if data is not None:
 						if capture_output:
 							output.extend(data)
-							log.append("Data is not none y se agrega a la salida")
+							log.append("Data is not none and is added to the output")
 							time_out = 1.28
 						else:
-							log.append("Data is not none no se agrega a la salida")
+							log.append("Data is not none is not added to the output")
 							sys.stdout.write(data.decode('utf-8', 'ignore'))
 
 					# Mensajes del promp
@@ -108,8 +108,8 @@ class ConnectionSSH():
 							os.write(pty_fd, _b(command_remote + '\n'))
 							log.append("Se logro la conexion")
 						elif rd_ready[0] == stderr_fd and b'Permission denied, please try again.' in data:
-							log.append("Error al ingresar la contraseña")
-							output.extend(b'Usuario o password incorrectos')
+							log.append("Error entering password")
+							output.extend(b'Wrong username or password')
 							break
 						elif rd_ready[0] == stderr_fd and (
 								b'Could not resolve hostname' in data
@@ -119,20 +119,20 @@ class ConnectionSSH():
 							or b'No such file or directory' in data
 							or b'not found.' in data
 							or b'Couldn\'t delete file: Failure' in data):
-							log.append("La terminal regresa error.")
+							log.append("Terminal returns error.")
 							output.extend(data)
 						else:
 							sys.stderr.write(data.decode('utf-8', 'ignore'))
-							log.append("Error no identificado, se describe data a continuación")
+							log.append("Unidentified error, data is described below")
 							log.append( str( data.decode('utf-8', 'ignore') ) )
 							log.append(str(stderr_fd))
 							log.append(str(rd_ready[0]))
 							output.extend(data)
 				else:
-					log.append("Se hizo un break")
+					log.append("A break was made")
 					break
 		finally:
-			log.append("Crasheo")
+			log.append("Crash")
 			os.close(pty_fd)
 			
 		pid, retval = os.waitpid(pid, 0)
