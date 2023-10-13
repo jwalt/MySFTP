@@ -39,10 +39,16 @@ class ConnectionSSH():
 			os.close(w1_fd)
 			os.close(w2_fd)
 			
+			args = [ program ]
+			if Configuration.password:
+				args.extend(["-o", 'PubkeyAuthentication=no'])
+
 			if program == 'sftp':
-				os.execvp(program, [program, "-o", 'PubkeyAuthentication=no', port, user_host])
+				args.extend([port, user_host])
 			elif program == 'ssh':
-				os.execvp(program, [program, "-o", 'PubkeyAuthentication=no', user_host, command_remote])
+				args.extend([user_host, command_remote])
+
+			os.execvp(args[0], args)
 		
 		os.close(w1_fd)
 		os.close(w2_fd)
