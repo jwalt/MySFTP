@@ -1,3 +1,4 @@
+import sublime
 import json
 import re
 from .extras import readFile, Debug, getPath
@@ -60,16 +61,13 @@ class Configuration():
 		Configuration.password = json_file[0]['password']
 		Configuration.port = json_file[0]['port']
 
+		Configuration.flag_config = False
 		if Configuration.user == None or Configuration.user == '':
-			self.window.run_command("progress_bar", {"message" : "Host server not defined in configuration file"})
-		if Configuration.host == None or Configuration.host == '':
-			self.window.run_command("progress_bar", {"message" : "Host server not defined in configuration file"})
-		if Configuration.password == None or Configuration.password == '':
-			self.window.run_command("progress_bar", {"message" : "The password has not been defined in the configuration file"})
-		if Configuration.user == None or Configuration.user == '' or Configuration.host == None or Configuration.host == '' or Configuration.password == None or Configuration.password == '': 
-			Configuration.flag_config = False
-			return
-		Configuration.flag_config = True
+			sublime.message_dialog("Host server not defined in configuration file")
+		elif Configuration.host == None or Configuration.host == '':
+			sublime.message_dialog("Host server not defined in configuration file")
+		else:
+			Configuration.flag_config = True
 
 	@staticmethod
 	def getJsonConfig():
