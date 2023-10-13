@@ -10,14 +10,14 @@
 		},
 		"children": [
 			{
-				"caption": "Actualizar Local to Servidor",
+				"caption": "Upload to Server",
 				"command": "sync_files",
 				"args": {
 					"comando" : "put_sftp"
 				}
 			},
 			{
-				"caption": "Actualizar Servidor to Local",
+				"caption": "Download from Server",
 				"command": "sync_files",
 				"args": {
 					"comando" : "get_sftp"

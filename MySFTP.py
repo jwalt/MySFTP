@@ -72,8 +72,8 @@ def plugin_loaded():
 
 class MySftp(sublime_plugin.TextCommand):
 	listServers = []
-	optionsFiles = ["> Cambiar de Servidor", "> Regresar", "> Editar","> Renombrar","> Cambiar Permisos","> Eliminar"]
-	optionsFolders = ["> Cambiar de Servidor", "> Subir nivel","> Nuevo Archivo","> Nueva Carpeta","> Renombrar","> Cambiar Permisos","> Eliminar"]
+	optionsFiles = ["> Change Server", "> Go back", "> Edit","> Rename","> Change Permissions","> Eliminate"]
+	optionsFolders = ["> Change Server", "> Level Up","> New File","> New Folder","> Rename","> Change Permissions","> Eliminate"]
 
 	settings = None
 
@@ -96,12 +96,12 @@ class MySftp(sublime_plugin.TextCommand):
 			return True
 		if response.find('Could not resolve hostname') != -1 or response.find('No route to host') != -1 or response.find('Network is unreachable') != -1 or response.find('Connection refused') != -1:
 			ProgressBar.showError(self)
-			ProgressBar.showMessage(self, 'Imposible conectar con el servidor, no se pudo resolver: {}.\n'.format(Configuration.host))
+			ProgressBar.showMessage(self, 'Unable to connect to server, could not be resolved: {}.\n'.format(Configuration.host))
 			return False
 		elif response.find('Permission denied') != -1 or response.find('Could not create file') != -1:
 			ProgressBar.showErrorPermissions(self)
 			return False
-		elif response.find('Usuario o password incorrectos') != -1 or response.find('Login incorrect') != -1:
+		elif response.find('Wrong username or password') != -1 or response.find('Login incorrect') != -1:
 			ProgressBar.showErrorCredentials(self)
 			return False
 		elif response.find('TimeOutExpired') != -1:
@@ -110,7 +110,7 @@ class MySftp(sublime_plugin.TextCommand):
 			ProgressBar.showErrorNoSuchFileOrDirectory(self)
 		elif response.find('PermissionError: [WinError 32]') != -1:
 			ProgressBar.showError(self)
-		elif response.find('No se puede establecer una conexión ya que el equipo de destino denegó expresamente') != -1:
+		elif response.find('A connection cannot be established as the destination computer expressly denied') != -1:
 			ProgressBar.showConnectionRefuse(self)
 			return False
 		else:
@@ -140,7 +140,7 @@ class showServers(sublime_plugin.WindowCommand):
 	def run(self, args):
 		MySftp.isWorking();
 		MySftp.listServers = args
-		MySftp.listServers.insert(0, "Nuevo servidor.")
+		MySftp.listServers.insert(0, "New server.")
 		quick_list = [option for option in MySftp.listServers]
 		self.quick_list = quick_list
 		self.window.show_quick_panel(quick_list,self.on_done,0)
@@ -153,7 +153,7 @@ class showServers(sublime_plugin.WindowCommand):
 			Configuration.setConfig(os.path.join(Configuration.servers_path, MySftp.listServers[index] + ".json"))
 			if not Configuration.flag_config:
 				return
-			if previous_config.host == '' or previous_config.usuario == '' or previous_config.host != Configuration.host or previous_config.usuario != Configuration.usuario or previous_config.puerto != Configuration.puerto:
+			if previous_config.host == '' or previous_config.user == '' or previous_config.host != Configuration.host or previous_config.user != Configuration.user or previous_config.port != Configuration.port:
 				ProgressBar.initConnection(self)
 
 			t1 = Thread(target=self.listado)
@@ -299,13 +299,13 @@ class getSftp(sublime_plugin.TextCommand):
 				nick_current_use = readFile(os.path.join(Configuration.tmp_path, getTmpName(file))).strip()
 				os.remove(os.path.join(Configuration.tmp_path, getTmpName(file)))
 				if nick_current_use != Configuration.nick:
-					if not sublime.ok_cancel_dialog("El usuario " + nick_current_use + " esta usando actualmente el archivo, Deseas continuar con la descarga?."):
+					if not sublime.ok_cancel_dialog("The user " + nick_current_use + " is currently using the file, do you want to continue with the download??."):
 						Debug.print('Se manda a cancelar.')
 						ProgressBar.showCancel(self)
 						return
 
 		if os.path.exists(os.path.join(Configuration.tmp_path, file)) and self.view.window().find_open_file(os.path.join(Configuration.tmp_path, file)) and flag == False:
-			sublime.message_dialog("Ya existe un archivo con el mismo nombre, cierre primero para poder continuar editando otro archivo con el mismo nombre.")
+			sublime.message_dialog("A file with the same name already exists, please close it first so that you can continue editing another file with the same name.")
 			return
 		
 		salida = Connection.get(file, os.path.join(Configuration.tmp_path, file))
@@ -337,7 +337,7 @@ class MySftpEvent(sublime_plugin.EventListener):
 		if ruta != None and os.path.dirname(ruta) == Configuration.tmp_path:
 			view.run_command("put_sftp", {"file" : view.file_name(), "flag" : False })
 		else:
-			Debug.print("este archivo no es valido para el package.")
+			Debug.print("this file is not valid for the package.")
 
 	def on_close(self, view):
 		ruta = view.file_name()
@@ -370,7 +370,7 @@ class putSftp(sublime_plugin.TextCommand):
 		if flag == False:
 			path_put = readFile(os.path.splitext(ruta)[0] + ".path")
 			json_file = json.loads( readFile(os.path.splitext(ruta)[0] + ".config") )
-			if Configuration.host == '' or Configuration.usuario == '' or Configuration.password == '' or Configuration.host != json_file[0]["host"] or Configuration.usuario != json_file[0]["user"] or Configuration.password != json_file[0]["password"]:
+			if Configuration.host == '' or Configuration.user == '' or Configuration.password == '' or Configuration.host != json_file[0]["host"] or Configuration.user != json_file[0]["user"] or Configuration.password != json_file[0]["password"]:
 				Configuration.setConfig(os.path.splitext(ruta)[0] + ".config")
 				if Configuration.flag_config != True:
 					return
@@ -388,7 +388,7 @@ class putSftp(sublime_plugin.TextCommand):
 			if os.path.exists( os.path.join(Configuration.tmp_path, getTmpName(ruta)) ):#Validamos que exista el archivo
 				nick_current_use = readFile(os.path.join(Configuration.tmp_path, getTmpName(ruta))).strip()
 				if Configuration.nick != nick_current_use and flag == False:
-					if not sublime.ok_cancel_dialog("El usuario " + nick_current_use + " esta usando actualmente el archivo, Deseas subir tus cambios?."):
+					if not sublime.ok_cancel_dialog("The user " + nick_current_use + " is currently using the file, do you want to upload your changes?."):
 						ProgressBar.showCancel(self)
 						return
 
@@ -421,7 +421,7 @@ class newFileSftp(sublime_plugin.WindowCommand):
 		t1 = Thread(target=self.getListFiles)
 		t1.start()
 		time.sleep(0.16)
-		self.window.show_input_panel("Nombre del archivo:", "", self.createFile, None, None)
+		self.window.show_input_panel("File name:", "", self.createFile, None, None)
 
 	def createFile(self,name_file):
 		# Validamos el nombre de archivo
@@ -429,10 +429,10 @@ class newFileSftp(sublime_plugin.WindowCommand):
 		if re.match("^[\w\-. ]+$", name_file):
 			# Revisamos que no exista el archivo en remoto
 			if name_file in showLs.list_files:
-				sublime.message_dialog("Ya existe un archivo con el nombre: " + name_file + " en: " + Configuration.currentPath)
+				sublime.message_dialog("There is already a file with the name: " + name_file + " en: " + Configuration.currentPath)
 				return
 			if os.path.isfile(os.path.join(Configuration.tmp_path, name_file)):
-				sublime.message_dialog("Se encuentra editando un archivo con el mismo nombre, se recomienda cerrarlo primero.")
+				sublime.message_dialog("You are editing a file with the same name, it is recommended to close it first.")
 			else:
 				local_file = os.path.join(Configuration.tmp_path, name_file)
 				createFile(local_file)
@@ -462,14 +462,14 @@ class newDirSftp(sublime_plugin.WindowCommand):
 		t1 = Thread(target=self.getListFiles)
 		t1.start()
 		time.sleep(0.16)
-		self.window.show_input_panel("Nombre del directorio:", "", self.createDir, None, None)
+		self.window.show_input_panel("Directory name:", "", self.createDir, None, None)
 
 	def createDir(self, name_dir):
 		name_dir = name_dir.strip();
 		if re.match("^[\w\-. ]+$", name_dir):
 			# Revisamos que no exista el archivo en remoto
 			if (name_dir + '/') in showLs.list_files:
-				sublime.message_dialog("Ya existe un directorio con el nombre: " + name_dir + " en: " + Configuration.currentPath)
+				sublime.message_dialog("A directory with the name already exists: " + name_dir + " en: " + Configuration.currentPath)
 				return
 			t2 = Thread(target=self.hilo, args=[name_dir])
 			t2.start()
@@ -508,7 +508,7 @@ class NewServer(sublime_plugin.WindowCommand):
 
 class renameSftp(sublime_plugin.WindowCommand):
 	def run(self, path, is_folder = False):
-		self.window.show_input_panel("Nombre Nuevo:", path, lambda name:self.rename(path, name, is_folder), None, None)
+		self.window.show_input_panel("New Name:", path, lambda name:self.rename(path, name, is_folder), None, None)
 
 	def rename(self, current_name, new_name, is_folder = False):
 		ProgressBar.showRename(self, current_name, new_name)
@@ -532,7 +532,7 @@ class renameSftp(sublime_plugin.WindowCommand):
 
 class SideBar(sublime_plugin.WindowCommand):
 	def run(self, paths = []):
-		###self.window.run_command("progress_bar", {"msg" : "\nCargando "})
+		###self.window.run_command("progress_bar", {"msg" : "\nCharging "})
 		ProgressBar.showDownload(self)
 		t1 = Thread(target=self.testLoad)
 		t1.start()

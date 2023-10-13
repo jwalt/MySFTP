@@ -8,10 +8,10 @@
 				"mnemonic": "F",
 				"children":
 				[
-					{ "command": "new_server", "caption": "Nuevo Servidor…" },
-					{ "command": "my_sftp", "caption": "Listar Servidor…" },
-					{ "command": "server_manager", "caption": "Editar Servidor…", "args" : { "action" : "edit"}  },
-					{ "command": "server_manager", "caption": "Borrar Servidor…", "args" : { "action" : "remove"}  }
+					{ "command": "new_server", "caption": "New Server…" },
+					{ "command": "my_sftp", "caption": "List Server…" },
+					{ "command": "server_manager", "caption": "Edit Server…", "args" : { "action" : "edit"}  },
+					{ "command": "server_manager", "caption": "Delete Server…", "args" : { "action" : "remove"}  }
 				]
 			}
 		]

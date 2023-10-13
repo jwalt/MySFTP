@@ -19,49 +19,49 @@ Donación de $300.00 pesos - https://www.mercadopago.com.mx/checkout/v1/redirect
 :muscle: :sunglasses: :punch:
 <p align="center"><img src ="https://upload.wikimedia.org/wikipedia/en/d/d2/Sublime_Text_3_logo.png" width="128px"/></p>
 
-Modo de uso.
+Mode of use.
 -------------------
 
-- Desde el menú de Sublime Text: Archivo > MySftp
-    - **Nuevo Servidor :** Creamos un archivo de configuración para la conexión SFTP/FTP con nuestro servidor.
-        - **Nick :** Nombre de usuario que ocupara los archivo.
-        - **type :** Tipo de conexión con el servidor (SFTP o FTP).
-        - **host :** IP(v4) o Nombre de dominio del servidor al que se desea conectar.
-        - **user :** Nombre de usuario con el que va a logearse para realizar la conexión.
-        - **password :** Contraseña con la que va a logearse el usuario antes asignado para el logeo.
-        - **port :** Puerto que se va utilizar para la conexión por defecto 22 para SFTP y 21 para FTP.
-        - **remote_path :** Ruta principal del servidor que va a listarse.
+- From the Sublime Text menu: File > MySftp
+    - **New Server :** We create a configuration file for the SFTP/FTP connection with our server.
+        - **Nick :** Username that will occupy the files.
+        - **type :** Type of connection to the server (SFTP or FTP).
+        - **host :** IP(v4) or Domain name of the server to which you want to connect.
+        - **user :** Username with which to log in to make the connection.
+        - **password :** Password with which the previously assigned user will log in.
+        - **port :** Port to be used for the default connection 22 for SFTP and 21 for FTP.
+        - **remote_path :** Main path of the server to list.
 
-    - **Listar Servidor :** Lista los servidores previamente configurados. 
-    - **Editar Servidor :** Nos permite realizar cambios en la configuración de los servidores existentes.
-    - **Eliminar Servidor :** Elimina las configuraciones de los servidores.
+    - **List Server :** Lists previously configured servers.
+    - **Edit Server :** Allows us to make changes to the configuration of existing servers.
+    - **Delete Server :** Deletes the server configurations.
 
-- Conbinacion de Teclas
-    - Utilice la combinación de teclas <kbd>Ctrl+Alt+L</kbd> , <kbd>Ctrl+Alt+S</kbd>, para listar los servidores configurados.
+- Combination of keys
+    - Use the key combination <kbd>Ctrl+Alt+L</kbd> , <kbd>Ctrl+Alt+S</kbd>, to list the configured servers.
 
-## Navegación
+## Navigation
 
-1. Pulse la tecla **Enter** sobre el servidor que desea trabajar, inmediatamente se listara el directorio asignado como principal en el archivo de configuración.
-2. Puede escoger entre las siguientes opciones:
-    - Cambiar de servidor.
-    - Subir de nivel el directorio actual.
-    - Crear un archivo nuevo en el directorio actual.
-    - Crear una nueva carpeta en el directorio actual.
-    - Renombrar el directorio actual.
-    - Cambiar permisos al directorio actual.
-    - Eliminar eliminar el directorio actual.
+1. Press the **Enter** key on the server you want to work on, it will immediately list the directory assigned as main in the configuration file.
+2. You can choose between the following options:
+    - Change server.
+    - Level up the current directory.
+    - Create a new file in the current directory.
+    - Create a new folder in the current directory.
+    - Rename the current directory.
+    - Change permissions to the current directory.
+    - Delete delete the current directory.
     
-    \( Las ultimas 6 opciones requieren permisos en servidores linux \)
-3. Si selecciona un archivo de la lista podrá realizar las siguientes acciones:
-    - Cambiar de servidor.
-    - Regresar a la lista anterior.
-    - Editar, se abrirá en una pestaña nueva, cuando se guarde automáticamente este se actualizara en el servidor.
-    - Renombrar el archivo en el servidor.
-    - Cambiar permisos para el archivo seleccionado.
-    - Eliminar archivo seleccionado en el servidor.
+    \( The last 6 options require permissions on linux servers \)
+3. By selecting a file from the list you can perform the following actions:
+    - Change server.
+    - Return to the previous list.
+    - Edit, it will open in a new tab, when it is automatically saved it will be updated on the server.
+    - Rename the file on the server.
+    - Change permissions for the selected file.
+    - Delete selected file on the server.
     
-    \( Las ultimas 4 opciones requieren permisos en servidores linux \)
-4. Si selecciona un directorio se desplegara el mismo menú del paso 2.
+    \( The last 6 options require permissions on linux servers \)
+4. If you select a directory, the same menu as step 2 will be displayed.
 
 Estado
 -------------------
@@ -71,4 +71,4 @@ En Desarrollo :computer: :coffee:
 Notas
 -------------------
 
-Se recomienda hacer un respaldo antes de empezar a usar ya que este se encuentra en una fase inicial de desarrollo y puede dañar sus documentos.
+It is recommended to make a backup before you start using it as it is in an early stage of development and may damage your documents.
