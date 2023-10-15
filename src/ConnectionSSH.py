@@ -28,14 +28,19 @@ class ConnectionSSH():
 		# create pipe for stdout
 		stdout_fd, w1_fd = os.pipe()
 		stderr_fd, w2_fd = os.pipe()
+		r1_fd, pty_fd = os.pipe()
 		
-		pid, pty_fd = pty.fork()
+		#pid, pty_fd = pty.fork()
+		pid = os.fork()
 		if not pid:
 			log.append("if Not pid")
+			os.close(pty_fd)
 			os.close(stdout_fd)
 			os.close(stderr_fd)
+			os.dup2(r1_fd, 0)
 			os.dup2(w1_fd, 1)
 			os.dup2(w2_fd, 2)
+			os.close(r1_fd)
 			os.close(w1_fd)
 			os.close(w2_fd)
 			
@@ -50,11 +55,12 @@ class ConnectionSSH():
 
 			os.execvp(args[0], args)
 		
+		os.close(r1_fd)
 		os.close(w1_fd)
 		os.close(w2_fd)
 		
 		output = bytearray()
-		rd_fds = [stdout_fd, stderr_fd, pty_fd]
+		rd_fds = [stdout_fd, stderr_fd]
 
 		def _read(fd):
 			if fd not in rd_ready:
@@ -86,16 +92,6 @@ class ConnectionSSH():
 					log.append("2. Status rd_ready:" + str(rd_ready))
 				
 				if rd_ready:
-					# Deal with prompts from pty
-					data = _read(pty_fd)
-					if data is not None:
-						if b'assword:' in data:
-							os.write(pty_fd, _b(Configuration.password + '\n'))
-							log.append("password was typed")
-						elif b're you sure you want to continue connecting' in data:
-							os.write(pty_fd, b'yes\n')
-							log.append("It was said that if you wanted to continue")
-
 					# Deal with stdout
 					data = _read(stdout_fd)
 					if data is not None:
@@ -110,8 +106,15 @@ class ConnectionSSH():
 					# Mensajes del promp
 					data = _read(stderr_fd)
 					if data is not None:
-						if rd_ready[0] == stderr_fd and b'onnected to' in data:
+						if b'assword:' in data:
+							os.write(pty_fd, _b(Configuration.password + '\n'))
+							log.append("password was typed")
+						elif b're you sure you want to continue connecting' in data:
+							os.write(pty_fd, b'yes\n')
+							log.append("It was said that if you wanted to continue")
+						elif rd_ready[0] == stderr_fd and b'onnected to' in data:
 							os.write(pty_fd, _b(command_remote + '\n'))
+							os.close(pty_fd)
 							log.append("Se logro la conexion")
 						elif rd_ready[0] == stderr_fd and b'Permission denied, please try again.' in data:
 							log.append("Error entering password")
@@ -139,7 +142,12 @@ class ConnectionSSH():
 					break
 		finally:
 			log.append("Crash")
-			os.close(pty_fd)
+			try: os.close(pty_fd)
+			except: pass
+			try: os.close(stdout_fd)
+			except: pass
+			try: os.close(stderr_fd)
+			except: pass
 			
 		pid, retval = os.waitpid(pid, 0)
 		return retval, output, log
