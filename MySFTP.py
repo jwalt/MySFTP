@@ -87,7 +87,7 @@ class MySftp(sublime_plugin.TextCommand):
 			if ShowProgressBarCommand.loading:
 				raise Exception("threading isAlive")
 		except Exception as e:
-			sublime.message_dialog("Hay una operación en proceso, espere a que esta termine para continuar.")
+			sublime.message_dialog("An operation is in progress, please wait until it is complete.")
 			raise e
 
 	@staticmethod
@@ -106,7 +106,7 @@ class MySftp(sublime_plugin.TextCommand):
 			return False
 		elif response.find('TimeOutExpired') != -1:
 			ProgressBar.showErrorTimeOutExpired(self)
-		elif response.find('o such file or directory') != -1:
+		elif response.find('No such file or directory') != -1:
 			ProgressBar.showErrorNoSuchFileOrDirectory(self)
 		elif response.find('PermissionError: [WinError 32]') != -1:
 			ProgressBar.showError(self)
@@ -176,7 +176,7 @@ class showLs(sublime_plugin.WindowCommand):
 	def requestListFiles(self):
 		response = showLs.getListFiles(self, True)
 		if showLs.list_files != None and response != False:
-			self.Options = ["Directorio: " + Configuration.currentPath] + MySftp.optionsFolders + showLs.list_files
+			self.Options = ["Directory: " + Configuration.currentPath] + MySftp.optionsFolders + showLs.list_files
 			quick_list = [option for option in self.Options]
 			self.quick_list = quick_list
 			self.window.show_quick_panel(quick_list, lambda id : self.on_done(id), 0)
@@ -195,7 +195,7 @@ class showLs(sublime_plugin.WindowCommand):
 				showLs.list_files = list_files_old
 				if salida != False and salida.find("no such file or directory") != -1:
 					Configuration.currentPath = tmp_current_path;
-					self.Options = [ "Archivo: " + showLs.list_files[index - 8][:-2] ] + MySftp.optionsFiles
+					self.Options = [ "File: " + showLs.list_files[index - 8][:-2] ] + MySftp.optionsFiles
 					quick_list = [option for option in self.Options]
 					self.quick_list = quick_list
 					self.window.show_quick_panel(quick_list, lambda id : self.file_selected(id, showLs.list_files[index - 8][:-2]), 0)
@@ -204,7 +204,7 @@ class showLs(sublime_plugin.WindowCommand):
 					Configuration.currentPath = getPath(Configuration.currentPath, showLs.list_files[index - 8][:-2])
 					self.window.run_command("show_ls");
 			else:
-				self.Options = [ "Archivo: " + showLs.list_files[index - 8] ] + MySftp.optionsFiles
+				self.Options = [ "File: " + showLs.list_files[index - 8] ] + MySftp.optionsFiles
 				quick_list = [option for option in self.Options]
 				self.quick_list = quick_list
 				self.window.show_quick_panel(quick_list, lambda id : self.file_selected(id, showLs.list_files[index - 8]), 0)
@@ -223,7 +223,7 @@ class showLs(sublime_plugin.WindowCommand):
 						['rename_sftp', {"path" : file}], ['chmod_sftp', {"path" : file}],
 						['remove_sftp', {"path" : file, "is_file" : True}]]
 		if index == 2:
-			self.Options = ["Directorio: " + Configuration.currentPath] + MySftp.optionsFolders + showLs.list_files
+			self.Options = ["Directory: " + Configuration.currentPath] + MySftp.optionsFolders + showLs.list_files
 			quick_list = [option for option in self.Options]
 			self.quick_list = quick_list
 			self.window.show_quick_panel(quick_list, lambda id : self.on_done(id), 0)

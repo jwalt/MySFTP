@@ -59,7 +59,6 @@ class ProgressBarCommand(sublime_plugin.WindowCommand):
 	createPanelOutput = False
 	
 	def run(self, msg = '', loading = False, stop = False):
-		print("method run ProgressBarCommand")
 		if ProgressBarCommand.createPanelOutput == False:
 			self.window.create_output_panel("progress_bar")
 			ProgressBarCommand.createPanelOutput = True
