@@ -139,6 +139,16 @@ class SyncFiles(sublime_plugin.WindowCommand):
 class showServers(sublime_plugin.WindowCommand):
 	def run(self, args):
 		MySftp.isWorking();
+
+		previous_config = Configuration( json.loads(Configuration.getJsonConfig()) )
+		if Configuration.flag_config:
+			fn = self.window.active_view().file_name()
+			if fn != None and os.path.dirname(fn) == Configuration.tmp_path:
+				Configuration.currentPath = readFile(os.path.splitext(fn)[0] + ".path")
+			t1 = Thread(target=self.listado)
+			t1.start()
+			return
+
 		MySftp.listServers = args
 		MySftp.listServers.insert(0, "New server.")
 		quick_list = [option for option in MySftp.listServers]
@@ -222,6 +232,7 @@ class showLs(sublime_plugin.WindowCommand):
 		commams_files = [['my_sftp', {}], ['show_ls', {}], ['get_sftp', {"file" : file}],
 						['rename_sftp', {"path" : file}], ['chmod_sftp', {"path" : file}],
 						['remove_sftp', {"path" : file, "is_file" : True}]]
+		if index == 0: index = 3
 		if index == 2:
 			self.Options = ["Directory: " + Configuration.currentPath] + MySftp.optionsFolders + showLs.list_files
 			quick_list = [option for option in self.Options]
